@@ -10,7 +10,7 @@ Usage:
 
    bash ptu_vm.sh create|delete
    
-   create: it can detect the resource group name and VM name existant so as to save time for follow-up creations.
+   create command can also detect the resource group name and VM name existance so as to save time for follow-up creations.
    ![image](https://github.com/Elizabeth819/ptubench_vm_auto_tool/assets/140314420/97b16370-a920-4b81-af75-2e633ebf581c)
    ![image](https://github.com/Elizabeth819/ptubench_vm_auto_tool/assets/140314420/e8953074-f18b-4af2-8fc5-822698486477)
    It additionally transfers a test script to the newly created VM and prepares the environment by cloning a benchmarking tool repository.
