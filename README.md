@@ -26,6 +26,7 @@ Make sure to delete the JITRule of "Deny" and add a high priority "Allow" rule f
 <img width="281" alt="image" src="https://github.com/Elizabeth819/ptubench_vm_auto_tool/assets/140314420/210c14ce-f912-4a94-aee4-715e832cb8be">
 
 <img width="675" alt="image" src="https://github.com/Elizabeth819/ptubench_vm_auto_tool/assets/140314420/7a48d5b9-ab21-4159-a748-557b9c0998d8">
+
 Login in successfully!
 <img width="1172" alt="image" src="https://github.com/Elizabeth819/ptubench_vm_auto_tool/assets/140314420/aff7f259-7c5d-46ef-a973-0ac26a2a6585">
 
