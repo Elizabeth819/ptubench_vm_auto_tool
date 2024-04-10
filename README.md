@@ -5,8 +5,11 @@ You don't need to create VM in the portal, saving the processes to choose VM and
 wait VM to start and then configure the SSH connection from local network.
 
 1. The ptu_vm.sh script serves as an automation tool for provisioning and managing Azure virtual machines (VMs) specifically set up for PTU. It accepts an argument that directs the script to either create or delete resources. In the 'create' mode, it establishes a new Azure VM within a resource group, sets up the Azure AD login for SSH access, and transfers a test script to the VM for benchmarking. In contrast, the 'delete' mode prompts the user for confirmation before proceeding to remove the VM and its associated resource group, preventing accidental data loss.
+
 Usage:
+
    bash ptu_vm.sh create|delete
+   
    create: it can detect the resource group name and VM name existant so as to save time for follow-up creations.
    ![image](https://github.com/Elizabeth819/ptubench_vm_auto_tool/assets/140314420/97b16370-a920-4b81-af75-2e633ebf581c)
    ![image](https://github.com/Elizabeth819/ptubench_vm_auto_tool/assets/140314420/e8953074-f18b-4af2-8fc5-822698486477)
