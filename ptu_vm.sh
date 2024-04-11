@@ -5,17 +5,16 @@ ACTION=$1
 # The script is to create a new VM for PTU testing
 #create the resource group
 #export RANDOM_ID="$(openssl rand -hex 3)"
-export RANDOM_ID=""
-export MY_RESOURCE_GROUP_NAME="ptu-eliz-rg$RANDOM_ID"
-
+export RANDOM_ID="123"
+export MY_RESOURCE_GROUP_NAME="ptu-rg$RANDOM_ID" # "swedencentral-vm"
 #let the user input REGION name
-#echo "请输入区域名称（例如：EastUS, AustraliaEast, CentralUS, SwedenCentral）："
-#read REGION
-export REGION="AustraliaEast"
-export MY_VM_NAME="PTU_VM_$REGION$RANDOM_ID"
+echo "Please input region name - in lowercase (eg: australiaeast, eastus, swedencentral):"
+read REGION
+#export REGION="australiaeast" #"swedencentral"
+export MY_VM_NAME="ptu-$REGION""_vm"  #"swedencentral-vm" #"PTU_VM_$REGION$RANDOM_ID"
 export MY_USERNAME=azureuser
 export MY_VM_IMAGE="Ubuntu2204"
-export SIZE="Standard_D2s_v3"
+export SIZE="Standard_D4s_v3" #"Standard_D2s_v3"
 
 # 删除虚拟机和资源组的函数
 delete_vm() {
@@ -78,13 +77,14 @@ create_vm() {
 }
 
   
-# 根据ACTION执行相应的函数
+# 根据ACTION执行相应的函数，if delete, then skip the following "enable Azure AD login and scp script", just exit after delete_vm()
 case "$ACTION" in
     create)
         create_vm
         ;;
     delete)
         delete_vm
+        exit 0
         ;;
     *)
         echo "Usage: $0 [create|delete]"
@@ -105,8 +105,9 @@ az vm extension set \
 export IP_ADDRESS=$(az vm show --show-details --resource-group $MY_RESOURCE_GROUP_NAME --name $MY_VM_NAME --query publicIps --output tsv)
 
 #先将脚本传输到远程VM
-echo 'Transit test_ptuscript.sh to VM';
-scp -o StrictHostKeyChecking=no /Users/wanmeng/repository/ptu_vm_test_script/test_ptuscript.sh azureuser@$IP_ADDRESS:/home/azureuser/
+echo 'Transit test_ptuscript.sh to VM, cmd:';
+echo "scp -o StrictHostKeyChecking=no test_ptuscript.sh azureuser@$IP_ADDRESS:/home/azureuser/"
+scp -o StrictHostKeyChecking=no test_ptuscript.sh azureuser@$IP_ADDRESS:/home/azureuser/
 
 #execute command on the remote VM
 COMMANDS="
@@ -115,20 +116,9 @@ if [ ! -d "azure-openai-benchmark" ]; then
     git clone https://github.com/michaeltremeer/azure-openai-benchmark.git;
 fi 
 
-# echo 'Running test script...';
-# ./test_ptuscript.sh;
-echo 'Please running test script on the VM directly...';
+echo 'Please running test script test_ptuscript.sh on the VM directly...';
 "
-##SSH to the VM
-echo "ssh to the $IP_ADDRESS and download the benchmarking tool ..."
+##execute downloading benchmarking repo command on the remote VM, not login to the VM
+echo "ssh to the $IP_ADDRESS, download the benchmarking tool..."
 ssh -o StrictHostKeyChecking=no $MY_USERNAME@$IP_ADDRESS "${COMMANDS}"
 echo "ssh command: ssh -o StrictHostKeyChecking=no $MY_USERNAME@$IP_ADDRESS"
-
-## Just use the following if not use the VM any more
-## delete the VM
-#echo "delete the VM $MY_VM_NAME"
-#az vm delete --resource-group $MY_RESOURCE_GROUP_NAME   --name $MY_VM_NAME --yes --no-wait
-#
-## delete the resource group
-#echo "delete the resource group $MY_RESOURCE_GROUP_NAME"
-#az group delete --name $MY_RESOURCE_GROUP_NAME  --yes --no-wait
