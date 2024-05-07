@@ -1,5 +1,10 @@
 #!/bin/bash
 # 使用方式: bash ptu_vm.sh [create|delete]
+if [ "$#" -ne 1 ]; then
+    echo "Usage: $0 create|delete"
+    echo "       'create' - create a new VM, or"
+    echo "       'delete' - delete an existing VM"
+    exit 1
 
 ACTION=$1
 # The script is to create a new VM for PTU testing
