@@ -5,6 +5,7 @@ if [ "$#" -ne 1 ]; then
     echo "       'create' - create a new VM, or"
     echo "       'delete' - delete an existing VM"
     exit 1
+fi
 
 ACTION=$1
 # The script is to create a new VM for PTU testing
@@ -122,7 +123,7 @@ if [ ! -d "azure-openai-benchmark" ]; then
 fi 
 
 echo 'Please running test script test_ptuscript.sh on the VM directly...';
-"
+
 ##execute downloading benchmarking repo command on the remote VM, not login to the VM
 echo "ssh to the $IP_ADDRESS, download the benchmarking tool..."
 ssh -o StrictHostKeyChecking=no $MY_USERNAME@$IP_ADDRESS "${COMMANDS}"
